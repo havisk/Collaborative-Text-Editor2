@@ -1,0 +1,12 @@
+/* CSS declarations go here */
+
+.top-margin{
+	margin-top:50px;
+}
+
+#viewer_iframe{
+	/*border:1px solid darkorange;*/
+  border:1px solid darkblue;
+	resize:both;
+	width:100%;
+}
