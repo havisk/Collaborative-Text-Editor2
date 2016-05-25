@@ -7,13 +7,8 @@ if (Meteor.isClient) {
   // return the id of the first document you can find
   Template.editor.helpers({
     docid:function(){
-      var doc = Documents.findOne();
-      if (doc){
-        return doc._id;
-      }
-      else {
-        return undefined;
-      }
+      setupCurrentDocument();
+      return Session.get("docid");
     }, 
     // configure the CodeMirror editor
     config:function(){
@@ -48,6 +43,30 @@ if (Meteor.isClient) {
       return users;
     }
   })
+
+  /////
+  //Events
+  ////
+
+  Template.navbar.events({
+    "click .js-add-doc": function(event){
+        event.preventDefault();
+        console.log("Add new doc!");
+        if (!Meteor.user()){//user not available
+            alert("You need to login first");
+        } 
+        else { 
+        //they are logged in and insert doc.
+        var id = Meteor.call("addDoc", function(err, res) {
+            if (!err){// all good
+              console.log("event callback received id: "+res);
+              Session.set("docid", res);
+            }
+        });
+      }
+    }
+
+  })
  
 }// end isClient...
 
@@ -61,6 +80,20 @@ if (Meteor.isServer) {
 }
 // methods that provide write access to the data
 Meteor.methods({
+  addDoc:function(){
+      var doc;
+      if (!this.userId) {// not logged in
+        return;
+      }
+      else{
+        doc = {owner:this.userId, createdOn:new Date(), title:"my new doc"};
+
+        var id = Documents.insert(doc);
+        console.log("addDoc method: got an id " + id);
+        return id;
+      }
+
+  },
   // allows changes to the editing users collection 
   addEditingUser:function(){
     var doc, user, eusers;
@@ -82,6 +115,16 @@ Meteor.methods({
     EditingUsers.upsert({_id:eusers._id}, eusers);
   }
 })
+
+function setupCurrentDocument(){
+  var doc;
+  if(!Session.get("docid")){//no doc id set yet
+    doc = Documents.findOne();
+    if (doc) {
+      Session.set("docid", doc._id);
+    }
+  }
+}
 
 // this renames object keys by removing hyphens to make the compatible 
 // with spacebars. 
