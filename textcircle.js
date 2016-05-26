@@ -44,6 +44,32 @@ if (Meteor.isClient) {
     }
   })
 
+  Template.navbar.helpers({
+    documents:function(){
+      return Documents.find({});
+    }
+  })
+
+  Template.docMeta.helpers({
+
+    document:function(){
+      return Documents.findOne({_id:Session.get("docid")});
+    }
+  })
+
+  Template.editableText.helpers({
+    userCanEdit:function(doc, Collection) {
+      //can edit if the current doc is owned by user
+      doc = Documents.findOne({_id:Session.get("docid"), owner:Meteor.userId()});
+      if (doc){
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+  })
+
   /////
   //Events
   ////
@@ -64,8 +90,19 @@ if (Meteor.isClient) {
             }
         });
       }
+    },
+    "click .js-load-doc":function(event){
+        console.log(this);
+        Session.set("docid", this._id);
     }
+  })
 
+  Template.docMeta.events({
+    "click .js-tog-private":function(event){
+      console.log(event.target.checked);
+      var doc = {_id:Session.get("docid"), isPrivate:event.target.checked};
+      Meteor.call("updateDocPrivacy", doc);
+    }
   })
  
 }// end isClient...
@@ -92,7 +129,16 @@ Meteor.methods({
         console.log("addDoc method: got an id " + id);
         return id;
       }
+  },
 
+  updateDocPrivacy:function(doc){
+    console.log("updateDocPrivacy method");
+    console.log(doc);
+    var realDoc = Documents.findOne({_id:doc._id, owner:this.userId});
+    if (realDoc){
+      realDoc.isPrivate = doc.isPrivate;
+      Documents.update({_id:doc._id}, realDoc);
+    }
   },
   // allows changes to the editing users collection 
   addEditingUser:function(){
@@ -127,7 +173,7 @@ function setupCurrentDocument(){
 }
 
 // this renames object keys by removing hyphens to make the compatible 
-// with spacebars. 
+// with space bars. 
 function fixObjectKeys(obj){
   var newObj = {};
   for (key in obj){
