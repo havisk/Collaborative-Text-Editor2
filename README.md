@@ -1,9 +1,9 @@
-#Collaborative Text Editor.
+# Collaborative Text Editor.
 
 - work with others on the same document with realtime update.
 
 
-##Tech Used
+## Tech Used
 
 - Meteor
 - Session
