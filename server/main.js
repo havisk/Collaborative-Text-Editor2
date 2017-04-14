@@ -1,7 +1,7 @@
 Meteor.startup(function () {
   // create a starter doc
   if (!Documents.findOne()){// no documents yet!
-      Documents.insert({title:"my new document"});
+      Documents.insert({title:"New Document"});
   }
   });
   // publish a list of documents the user can se

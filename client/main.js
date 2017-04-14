@@ -79,9 +79,9 @@ Template.editableText.helpers({
   }    
 })
 
-/////////
+
 /// EVENTS
-////////
+
 
 Template.navbar.events({
   // add a new document button
