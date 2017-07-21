@@ -57,7 +57,7 @@ Template.docMeta.helpers({
     var doc;
     doc = Documents.findOne({_id:Session.get("docid")});
     if (doc){
-      if (doc.owner == Meteor.userId()){
+      if (doc.owner === Meteor.userId()){
         return true;
       }
     }

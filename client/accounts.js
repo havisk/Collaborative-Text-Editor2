@@ -1,5 +1,5 @@
 
-    requestPermissions: {},
+    requestPermissions: {}
     extraSignupFields: [{
         fieldName: 'first-name',
         fieldLabel: 'First name',
@@ -61,10 +61,10 @@
             if (value) {
                 return true;
             } else {
-                errorFunction('You must accept the terms and conditions.');
+                errorFunction('You must accept the terms and conditions.')
                 return false;
             }
         }
     }]
-});
+
 

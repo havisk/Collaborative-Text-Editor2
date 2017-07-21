@@ -24,7 +24,7 @@ Meteor.methods({
     }
 
   },
-  // method to add editing suers to a document
+  // method to add editing users to a document
   addEditingUser:function(){
     var doc, user, eusers;
     doc = Documents.findOne();
@@ -44,4 +44,4 @@ Meteor.methods({
 
     EditingUsers.upsert({_id:eusers._id}, eusers);
   }
-})
+});
