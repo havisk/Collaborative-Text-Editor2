@@ -16,3 +16,5 @@
 - Clone this repo
 - Run `meteor` to start the server 
 - go to localhost:3000 in browser of choice.
+
+#Link to app:  https://ancient-journey-56493.herokuapp.com/
